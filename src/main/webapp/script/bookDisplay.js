@@ -18,7 +18,9 @@ window.bookCardTemplate = (book)=>{
 						  <a type="button" class="btn btn-success">Buy for ${book.price}$</a>
 						</div>
 						 <ul class="list-group list-group-flush">
-						    <li class="list-group-item">${book.genre}</li>
+						    <li class="list-group-item">
+						    	<span class="badge badge-default">${book.genre}</span>
+						    </li>
 						    <li class="list-group-item">${book.author}</li>
 						    <li class="list-group-item">
 						    </li>
