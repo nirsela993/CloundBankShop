@@ -1,0 +1,15 @@
+#pageContent{
+	margin-top: 100px;
+}
+.book-image{
+	width: 50%;
+	height: 238px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.book-card{
+	text-align: center;
+}
+.card-title{
+	height: 55px;
+}
