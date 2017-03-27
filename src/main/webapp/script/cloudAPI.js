@@ -3,7 +3,10 @@ const DB_STATS_URL = 'https://nirsela993.cloudant.com/comics_shop/'
 const booksQueryAmountAtOnce = 6
 const ALL_BOOKS_VIEW = `https://nirsela993.cloudant.com/comics_shop/_design/GetBooks/_view/GetBooks?limit=${booksQueryAmountAtOnce}`
 const GET_BOOK_BY_TITLE_URL = `https://nirsela993.cloudant.com/comics_shop/_design/GetBooks/_search/title?query=`
-
+const GET_REDDIS = `http://ex4.mybluemix.net/rest/books/getBooks?email=`
+const SET_REDDIS = `http://ex4.mybluemix.net/rest/books/setBook?email=`
+const REMOVE_REDDIS = `http://ex4.mybluemix.net/rest/books/removeBook?email=`
+const GET_NAMES_FROM_IDS = `https://nirsela993.cloudant.com/comics_shop/_design/GetBooks/_view/getBooksByIds?limit=20&reduce=false&keys=`
 const bookStoreAPI = {}
 
 bookStoreAPI.getAllBooks = (paging,callback)=>{
@@ -66,6 +69,67 @@ bookStoreAPI.getBookById = (id,callback)=>{
 	.then((response)=> {return response.json()}).then((resultJson)=> {
 		let book = new Book(resultJson.docs[0])
 		callback( book )
+	})
+}
+
+
+bookStoreAPI.getBookReddis = (email,callback)=>{
+	let headers = new Headers()
+
+	let options = {
+		method: 'GET',
+		headers: headers,
+	}
+
+	fetch(GET_REDDIS+email, options)
+	.then((response)=> {return response.json()}).then((resultJson)=> {
+		console.log("result",resultJson)
+		let bookids = resultJson.books.split(" ")
+		callback( bookids )
+	})
+}
+bookStoreAPI.setBookReddis = (email,bookid,callback)=>{
+	let headers = new Headers()
+
+	let options = {
+		method: 'GET',
+		headers: headers,
+	}
+
+	fetch(SET_REDDIS+email+'&book='+bookid, options)
+	.then((response)=> {return response}).then((resultJson)=> {
+		callback(  )
+	})
+}
+bookStoreAPI.removeBookReddis = (email,bookid,callback)=>{
+	let headers = new Headers()
+
+	let options = {
+		method: 'GET',
+		headers: headers
+	}
+
+	fetch(REMOVE_REDDIS+email+'&book='+bookid, options)
+	.then((response)=> {return response}).then((resultJson)=> {
+		callback(  )
+	})
+}
+
+bookStoreAPI.getNamesFromIds = (bookids,callback)=>{
+	let headers = new Headers()
+
+	let options = {
+		method: 'GET',
+		headers: headers,
+	}
+	console.log(GET_NAMES_FROM_IDS+JSON.stringify( bookids ))
+	fetch(GET_NAMES_FROM_IDS+JSON.stringify( bookids ), options)
+	.then((response)=> {return response.json()}).then((resultJson)=> {
+		let bookNames = []
+		for (var i = resultJson.rows.length - 1; i >= 0; i--) {
+			bookNames.push( resultJson.rows[i].value )
+		}
+		callback( bookNames )
 	})
 }
 

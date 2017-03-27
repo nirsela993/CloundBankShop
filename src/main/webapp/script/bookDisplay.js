@@ -87,7 +87,9 @@ window.addToCart = (bookId)=>{
 	}
 	currentUser.bookIds.push(bookId)
 	localStorage.setItem("user",JSON.stringify( currentUser ) )
-	location.reload()
+	bookStoreAPI.setBookReddis(currentUser.email,bookId,()=>{
+		location.reload()
+	})
 }
 
 
@@ -99,5 +101,7 @@ window.removeFromCart = (removeBookId)=>{
 	}
 	currentUser.bookIds = currentUser.bookIds.filter((bookId)=>{ return (bookId != removeBookId)})
 	localStorage.setItem("user",JSON.stringify( currentUser ) )
-	location.reload()
+	bookStoreAPI.removeBookReddis(currentUser.email,removeBookId,()=>{
+		location.reload()
+	})
 }

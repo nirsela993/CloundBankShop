@@ -14,6 +14,12 @@ document.body.innerHTML = `
 						<a class="nav-link" href="/pages/adminLogin.jsp">Admin Login</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="/pages/cart.jsp">Cart</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/pages/allBooks.jsp">all Books</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="/pages/about.jsp">About</a>
 					</li>
 					<li class="nav-item dropdown">
