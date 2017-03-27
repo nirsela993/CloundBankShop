@@ -34,7 +34,7 @@ public class Books {
 		 else {
 			 books_ids += " " + id;
 		 }
-		 String res = coms.set(email, books_ids);
+		 String res = coms.set(email, books_ids.trim());
 		 coms.close();
 		 client.shutdown();
 		 
@@ -49,17 +49,50 @@ public class Books {
 	@GET
 	@Path("/getBooks")
 	@Produces("application/json")
-	public String getBooks(@QueryParam("email") String email) {
+	public Response getBooks(@QueryParam("email") String email) {
+		System.out.println("bla-1");
+		 RedisClient client = RedisClient.create("redis://Aa123456@pub-redis-17484.dal-05.1.sl.garantiadata.com:17484");
+		 System.out.println("bla0.5");
+		 StatefulRedisConnection<String, String> con = client.connect();
+		 System.out.println("bla0");
+		 RedisCommands<String, String> coms =  con.sync();
+		 System.out.println("bla1");
+		 String res = coms.get(email);
+		 System.out.println("bla2");
+		 if (res == null) {
+			 res = "";
+		 }
+		 res = "{\"books\":\"" + res + "\"}";
+		 coms.close();
+		 client.shutdown();
+		 return Response.status(200).entity(res).header("Access-Control-Allow-Origin", "*").build();
+	}
+	
+	@GET
+	@Path("/removeBook")
+	@Produces("application/json")
+	public Response removeBook(@QueryParam("email") String email, @QueryParam("book") String idToRemove) {
 		 
 		 RedisClient client = RedisClient.create("redis://Aa123456@pub-redis-17484.dal-05.1.sl.garantiadata.com:17484");
 		 StatefulRedisConnection<String, String> con = client.connect(); 
 		 RedisCommands<String, String> coms =  con.sync();
-		 String res = coms.get(email);
-		 if (res == null) {
-			 res = "";
+		 System.out.println("bla0");
+		 String books_ids = coms.get(email);
+		 System.out.println("bla1");
+		 String[] ids = books_ids.split(" ");
+		 String idsToRemain = "";
+		 for (String id: ids) {
+			 if (!idToRemove.equals(id)) {
+				 idsToRemain += id + " ";
+			 }
 		 }
+		 idsToRemain = idsToRemain.trim();
+		 System.out.println("bla2");
+		 coms.set(email, idsToRemain);
+		 System.out.println("bla3");
+		 
 		 coms.close();
 		 client.shutdown();
-		 return res;
+		 return Response.status(200).build();
 	}
 }
