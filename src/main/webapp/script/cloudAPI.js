@@ -2,6 +2,7 @@ const CLOUDENT_QUERY_URL = 'https://nirsela993.cloudant.com/comics_shop/_find'
 const DB_STATS_URL = 'https://nirsela993.cloudant.com/comics_shop/'
 const booksQueryAmountAtOnce = 6
 const ALL_BOOKS_VIEW = `https://nirsela993.cloudant.com/comics_shop/_design/GetBooks/_view/GetBooks?limit=${booksQueryAmountAtOnce}`
+const GET_BOOK_BY_TITLE_URL = `https://nirsela993.cloudant.com/comics_shop/_design/GetBooks/_search/title?query=`
 
 const bookStoreAPI = {}
 
@@ -63,31 +64,23 @@ bookStoreAPI.getBookById = (id,callback)=>{
 
 	fetch(CLOUDENT_QUERY_URL, options)
 	.then((response)=> {return response.json()}).then((resultJson)=> {
-		let book = new Book(resultJson)
+		let book = new Book(resultJson.docs[0])
 		callback( book )
 	})
 }
 
-bookStoreAPI.getBookByTitle = (title,callback)=>{
+bookStoreAPI.getBooksByTitle = (title,callback)=>{
 	let headers = new Headers()
 	headers.set("Content-Type","application/json")
 
-	let payload = {
-		"selector": { "title" : title },
-
-		"fields": [	"_id", "title","picture", "genre", "dateAdded",
-		"author", "numberOfPages", "rating", "aumountOfBooksInStore", "coverPicture","price","summary"]
-		
-	}
 	let options = {
-		method: 'POST',
+		method: 'GET',
 		headers: headers,
-		body: JSON.stringify(payload)
 	}
 
-	fetch(CLOUDENT_QUERY_URL, options)
+	fetch(`${GET_BOOK_BY_TITLE_URL}title:${title}`, options)
 	.then((response)=> {return response.json()}).then((resultJson)=> {
-		let book = new Book(resultJson)
+		let book = (resultJson.rows)
 		callback( book )
 	})
 }

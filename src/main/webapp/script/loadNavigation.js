@@ -28,10 +28,17 @@ document.body.innerHTML = `
 						</div>
 					</li>
 				</ul>
-				<form class="form-inline my-2 my-lg-0">
-					<input class="form-control mr-sm-2" type="text" placeholder="Search">
-					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search by Book Title</button>
-				</form>
+				<div class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="Search" id="titleSearch">
+					<button class="btn btn-outline-success my-2 my-sm-0" onclick="searchBooks()">Search by Book Title</button>
+				</div>
 			</div>
 		</nav>
 ` + document.body.innerHTML;
+
+window.searchBooks = ()=>{
+		let input = document.getElementById("titleSearch").value
+		let searchUrl = ("/pages/bookTitleSearch.jsp?q="+input)
+		// console.log(searchUrl)
+		window.location = searchUrl
+}
