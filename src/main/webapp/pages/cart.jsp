@@ -53,13 +53,12 @@
 				bookStoreAPI.getBookReddis(currentUser.email,(bookIds)=>{
 					console.log(bookIds)
 					bookStoreAPI.getNamesFromIds(bookIds,(bookNames)=>{
+						console.log("bookNames",bookNames)
 						for (var i = bookNames.length - 1; i >= 0; i--) {
-							document.getElementById('cartList').innerHTML += `
-							<li class="list-group-item justify-content-between">
-								${bookNames[i]}
-								<span class="badge badge-danger badge-pill" onclick="removeFromCart('${bookIds[i]}')">remove</span>
-							</li>
-							`
+							document.getElementById('cartList').innerHTML += `<li class="list-group-item justify-content-between">
+								`+bookNames[i]+`
+								<span class="badge badge-danger badge-pill" onclick="removeFromCart('`+bookIds[i]+`')">remove</span>
+							</li>`
 						}
 					})
 				})
